@@ -1,0 +1,236 @@
+
+{% load static %}
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" >
+	<title>ثبت گزارش</title>
+    <!-- Custom stylesheet -->
+    <link rel="icon" type="image/png" href="{% static 'admin/dailyreport/img/lotus-icon.png' %}">
+	<link type="text/css" rel="stylesheet" href="{% static 'admin/dailyreport/css/bootstrap.css'%}">
+	<link type="text/css" rel="stylesheet" href="{% static 'admin/dailyreport/css/style.css'%}">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700' rel='stylesheet' type='text/css'>
+    
+	<link href="{% static 'admin/dailyreport/css/tooplate-chilling-cafe.css'%}" rel="stylesheet" >
+	<link rel="stylesheet" href="{% static 'admin/dailyreport/css/date.css'%}">
+	<script src="//code.jquery.com/jquery.min.js"></script>
+	<script src="{% static 'admin/dailyreport/js/kamadatepicker.js'%}"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css">
+	<!-- Include jQuery -->
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+	<!-- Include Date Range Picker -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css">
+
+	<link rel="stylesheet" href="{% static 'admin/dailyreport/css/persian.datepicker.css'%}">
+	<script src="{% static 'admin/dailyreport/js/jquery.js'%}"></script>
+	<script src="{% static 'admin/dailyreport/js/persian.date.js'%}"></script>
+	<script src="{% static 'admin/dailyreport/js/persian.datepicker.js'%}"></script>
+	
+	
+  <!-- Persian date picker -->
+  <script type="text/javascript">
+	$(document).ready(function() {
+	  $(".Date").pDatepicker({
+		observer: true,
+    format: 'YYYY-MM-DD  HH:mm',
+    altField: '.observer-example-alt'
+});
+	  
+	});
+
+
+  </script>
+   <link href="{% static 'admin/css/fonts.min.css' %}" rel="stylesheet">
+  
+ </head> 
+<!-- details include submit successfull -->
+<body class="tm-gray-bg">
+	{% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+    <p style="color:red;font-size: 27px;box-shadow: red;">{{ message }}</p>
+   
+    {% endfor %}
+    </ul>
+    {% endif %}
+	<div class="container">
+		<div class="row">
+			<h1 class="tm-site-name">ثبت گزارش</h1>
+		</div>
+		<form class="row input-container" method="POST" name="details">{% csrf_token %}
+			
+			<div class="col-md-6 col-sm-12">
+				<div class="styled-input">
+					
+					<label for="fullname">{{ user.get_full_name}}</label>
+					<input type="text" required name="fullname" id="fullname" readonly/>
+					
+				</div>
+				
+			
+			
+			
+				<div class="styled-input" style="float:right;">
+					<label for="Date">تاریخ</label>
+					<input type="text" style="font-size: 27px;" required  name="Date" class="Date" id="Date"  value={% now "YYYY-MM-DD  HH:mm" %}  />
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-12">
+				<div class="styled-input wide" >
+				
+					<div class="custom-options" id="selection" >
+						<select  name="undonework"  class="custom-options">
+							<option  class="custom-option "  disabled="True" selected >-------------------ادامه کار--------------</option>
+							
+							
+							
+						{% for reportdetails in allreports|dictsortreversed:"otherwork" %}
+						{% ifequal reportdetails.username_id user.username %}
+						{% ifequal reportdetails.otherworkdesc '1'  %}
+						
+						
+						{% ifchanged %} <option  class="custom-option " name="undonework" id="undonework">{{reportdetails.otherwork}}</option>{% endifchanged %}
+						
+					
+				
+						{% endifequal %}
+						{% endifequal %}
+							
+						{% endfor %}  
+						  
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xs-12">
+                <div class="styled-input wide" style="font-size: 20px;font-family: 'BNazanin';" >
+					<label for="workdesc" style="font-family: 'BNazanin';"></label>
+                    <textarea required name="workdesc" id="workdesc" placeholder="شرح کار" style="font-size: large;font-family: 'BNazanin';"></textarea>
+				</div>
+            </div>
+			<div class="col-md-6 col-sm-12">
+				<div class="styled-input" style="float:right;" >
+					<label for="tag" style="float: right;">تگ</label>
+					<input type="text" required name="tag" id="tag" list="tags" />
+					<datalist id="tags">
+						{% for group in  request.user.groups.all %}
+						{% if group.name ==  'مالی' %}
+						{% for reportdetails in allreports|dictsort:'tag' %}
+						{% ifequal reportdetails.managerid_id 3 %}
+						
+						{% ifchanged %}<option value="{{reportdetails.tag}}"> {% endifchanged %} 
+							{% endifequal %}
+							
+							{% endfor %}
+					 {% endif %}  
+					 {% if group.name ==  'IT' %}
+						{% for reportdetails in allreports|dictsort:'tag' %}
+						{% ifequal reportdetails.managerid_id 40 %}
+						{% ifchanged %}<option value="{{reportdetails.tag}}"> {% endifchanged %} 
+							{% endifequal %}
+							{% endfor %}
+					 {% endif %}  
+						{% endfor %}
+					</datalist>
+					<script>
+						var datalist = jQuery('datalist');
+var options = jQuery('datalist option');
+var optionsarray = jQuery.map(options ,function(option) {
+		return option.value;
+});
+var input = jQuery('input[list]');
+var inputcommas = (input.val().match(/,/g)||[]).length;
+var separator = ',';
+		
+function filldatalist(prefix) {
+	if (input.val().indexOf(separator) > -1 && options.length > 0) {
+		datalist.empty();
+		for (i=0; i < optionsarray.length; i++ ) {
+			if (prefix.indexOf(optionsarray[i]) < 0 ) {
+				datalist.append('<option value="'+prefix+optionsarray[i]+'">');
+			}
+		}
+	}
+}
+input.bind("change paste keyup",function() {
+	var inputtrim = input.val().replace(/^\s+|\s+$/g, " ");
+	var currentcommas = (input.val().match(/,/g)||[]).length;
+	if (inputtrim != input.val()) {
+		if (inputcommas != currentcommas) {
+			var lsIndex = inputtrim.lastIndexOf(separator);
+			var str = (lsIndex != -1) ? inputtrim.substr(0, lsIndex)+", " : " ";
+			filldatalist(str);
+			inputcommas = currentcommas;
+		}
+		input.val(inputtrim);
+	}
+});
+					</script> 
+				</div>
+			</div> 
+		
+		
+			<!-- groupby managerid ,this helps display of reportpage -->	
+			{% for employee in row %}
+			{% ifequal employee.username_id  user.get_username %}
+			
+			<input type="text" required name="managerid_id" id="managerid_id" value="{{ employee.managerid}}" readonly hidden />
+			
+			
+		
+			{% endifequal %} 
+			{% endfor %}  
+	
+			<button type="submit"  id="otherworkdesc" name="otherworkdesc" value="ثبت و اتمام" class="btn-block submit-btn"  > ثبت و اتمام</button>
+			<button type="submit"  id="otherworkdesc" name="otherworkdesc" value="ادامه دارد" class="btn-block submit-btn"  > ادامه دارد</button>
+	
+			<a href="/worksheet/report"  class="login100-form-btn" style="margin-left: 10px">
+                بازگشت به صفحه اصلی
+            </a>
+			</div>
+			
+			
+	</form>
+</div>
+<!-- Include jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css">
+
+<link rel="stylesheet" href="{% static 'admin/dailyreport/css/persian.datepicker.css'%}">
+<script src="{% static 'admin/dailyreport/js/jquery.js'%}"></script>
+<script src="{% static 'admin/dailyreport/js/persian.date.js'%}"></script>
+<script src="{% static 'admin/dailyreport/js/persian.datepicker.js'%}"></script>
+
+
+<!-- Persian date picker -->
+<script type="text/javascript">
+$(document).ready(function() {
+  $(".Date").pDatepicker({
+	observer: true,
+format: 'YYYY-MM-DD  HH:mm',
+altField: '.observer-example-alt'
+});
+  
+});
+
+
+</script>
+
+
+</body>
+
+</html>

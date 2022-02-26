@@ -1,0 +1,120 @@
+
+{% load static %}
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" >
+	<title>ویرایش گزارش</title>
+    <!-- Custom stylesheet -->
+    <link rel="icon" type="image/png" href="{% static 'admin/dailyreport/img/lotus-icon.png' %}">
+	<link type="text/css" rel="stylesheet" href="{% static 'admin/dailyreport/css/bootstrap.css'%}">
+	<link type="text/css" rel="stylesheet" href="{% static 'admin/dailyreport/css/style.css'%}">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
+	<link href="{% static 'admin/dailyreport/css/tooplate-chilling-cafe.css'%}" rel="stylesheet" >
+	<link rel="stylesheet" href="{% static 'admin/dailyreport/css/date.css'%}">
+	<script src="//code.jquery.com/jquery.min.js"></script>
+	<script src="{% static 'admin/js/kamadatepicker.js'%}"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css">
+	<!-- Include jQuery -->
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+	<!-- Include Date Range Picker -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css">
+
+	<link rel="stylesheet" href="{% static 'admin/dailyreport/css/persian.datepicker.css'%}">
+	<script src="{% static 'admin/dailyreport/js/jquery.js'%}"></script>
+	<script src="{% static 'admin/dailyreport/js/persian.date.js'%}"></script>
+	<script src="{% static 'admin/dailyreport/js/persian.datepicker.js'%}"></script>
+	
+	
+  <!-- Persian date picker -->
+  <script type="text/javascript">
+	$(document).ready(function() {
+	  $(".Date").pDatepicker({
+		observer: true,
+    format: 'YYYY-MM-DD  HH:mm',
+    altField: '.observer-example-alt'
+});
+	  
+	});
+
+
+  </script>
+   <link href="{% static 'admin/css/fonts.min.css' %}" rel="stylesheet">
+  </head>
+  
+  
+<!-- details include submit successfull -->
+<body class="tm-gray-bg">
+	{% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+    <p style="color:red;font-size: 27px;box-shadow: red;">{{ message }}</p>
+   
+    {% endfor %}
+    </ul>
+    {% endif %}
+	<div class="container">
+		<div class="row">
+			<h1 class="tm-site-name">ویرایش گزارش</h1>
+		</div>
+
+<div>
+    <form class="row input-container" method='POST'>{% csrf_token %}
+       
+        
+        {% for field in form %}
+        <label for={{field.name}} hidden>{{field.label_tag}}</label>
+        {% ifequal field.name 'Date' %}
+        <label for={{field.name}}>تاریخ</label>
+    {% endifequal %}
+    {% ifequal field.name 'undonework' %}
+  
+    {% endifequal %}
+ 
+    {% ifequal field.name 'workdesc' %}
+    <label for={{field.name}}>شرح کار</label>
+{% endifequal %}
+
+{% ifequal field.name 'tag' %}
+<label for={{field.name}}>تگ</label>
+{% endifequal %}
+         
+        
+        {{field}}
+
+        {% endfor %}
+        <button type="submit"  class="btn-block submit-btn" > ثبت تغییرات</button>
+      
+
+
+     
+    
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+<script>
+    $(document).ready(function(){
+        $('#delete').click(function(){
+            $('#delModal').modal('show');
+        });
+    });
+</script>
+</body>
+
+</html>
+	

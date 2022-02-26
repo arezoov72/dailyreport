@@ -1,0 +1,322 @@
+
+
+{% load static %}
+
+
+<!DOCTYPE html >
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0">
+    <title>لوتوس  پارسیان</title>
+    <link rel="icon" type="image/png" href="{% static 'admin/dailyreport/img/lotus-icon.png' %}">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700' rel='stylesheet' type='text/css'>
+    <link href="{% static 'admin/dailyreport/css/fonts.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet"
+    href=
+"https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity=
+"sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" 
+    crossorigin="anonymous" /> 
+    <link href="{% static 'admin/dailyreport/fontawesome/css/all.min.css'%}" rel="stylesheet" >
+    <link href="{% static 'admin/dailyreport/css/tooplate-chilling-cafe2.css'%}" rel="stylesheet" >
+    <link href="{% static 'admin/dailyreport/css/Filter.css'%}" rel="stylesheet" >
+    <link href="{% static 'admin/dailyreport/js/Filter.js'%}" rel="stylesheet" >
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!---->
+ 
+    
+    <link href="{% static 'admin/css/fonts.min.css' %}" rel="stylesheet">
+            <!-- BOOTSTRAP CSS AND PLUGINS-->
+      
+
+
+      <script src=
+"https://code.jquery.com/jquery-3.2.1.slim.min.js" 
+              integrity=
+"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" 
+              crossorigin="anonymous">
+    </script>
+      <script src=
+"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" 
+              integrity=
+"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" 
+              crossorigin="anonymous">
+    </script>
+      <script src=
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" 
+              integrity=
+"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+              crossorigin="anonymous">
+    </script>
+      <script src=
+"https://code.jquery.com/jquery-3.5.1.js"
+              integrity=
+"sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" 
+              crossorigin="anonymous">
+    </script>
+
+
+
+
+
+
+  
+
+
+
+
+
+<!--
+  report_list
+  managers and employee
+  
+-->
+</head>
+<body style="background-color: #3a4a58;">
+
+
+  <form  method="GET" action="/worksheet/search_page/" class="example" style="margin:auto;max-width:600px" onkeydown="return event.key != 'Enter';"> 
+    <button type="submit"><i class="fa fa-search"></i></button>
+    <input type="text"   name="q" id="q" placeholder="جستجو " value='{{request.GET.q}}' autofocus onkeyup="searchData()">
+     
+  </form>
+
+  <div class="col-3 col-s-3 tm-container">
+    
+    
+    <div id="tm-intro-img">
+      <div id="col-6 col-s-9 tm-intro-img2">
+      {% if user.is_authenticated %}
+      
+        <p class="tm-page-header" style="font-size: 22px;float: right;">{{ user.get_full_name}}</p>
+      {% endif %}
+        <a href="/worksheet/details" class="login300-form-btn" >ثبت و پیگیری گزارش</a>
+     
+      </div> 
+     
+      
+   
+      
+      
+      <div class="tm-text-white tm-page-header-container">
+      <a href="/worksheet/logout" class="fas fa-power-off fa-2x tm-page-icon" style="float: left;color: red;font-size: 30px;"></a>   
+    </div>
+  </div>
+    
+    
+    
+    <div class="  tm-main-content">
+
+      
+      
+      
+      <!-- report Menu -->
+      
+      <section class="tm-section">
+       
+
+
+     
+        <div class="tm-responsive-table" >
+          <table class="table-hover " >
+
+            <tr class="tm-tr-header"  >
+           
+              
+              <th class="row-1 row-ID">ردیف</th>
+              <th class="row-1 row-Date" >تاریخ</th>
+              <th class="row-1 row-name">نام و نام خانوادگی</th>
+              <th class="row-1 row-workdesc">شرح کار</th>
+              <th class="row-1 row-continiue">نیاز به پیگیری</th>
+              <th class="row-1 row-otherworkdesc">ادامه</th>
+              <th class="row-1 row-tag">تگ مربوطه</th>
+              <th class="row-1 row-comment">توضیحات</th>
+              <th class="row-1 row-comment1"></th>
+
+            </tr>
+            {% for reportdetails in  posts %}
+      
+            
+          
+            
+            <tr>
+            
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+              <td class="translate">{{forloop.counter}}</td>  
+              <script type="text/javascript">
+                var arabicNumbers = ['.', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+          $('.translate').text((i, v) => v.split('').map(c => parseInt(c) ? arabicNumbers[parseInt(c)] : c).join(''));
+          
+  </script>       
+              
+              <td class="gfgusername" >{% ifequal reportdetails.username_id user.username %}<a href="{% url 'dailyreport:edit_post' pk=reportdetails.id %}" style="color: black;">{% endifequal  %}{{reportdetails.Date}}</a></td>
+              <td class="gfgpp">{{reportdetails.fullname}}</td>
+              
+              <td class="gfgarticles"      data-toggle="modal" 
+              data-target="#gfgmodal"  title="{{reportdetails.workdesc}}"  style="float: right;" width="200"    
+              >
+                {{reportdetails.workdesc}}
+              </td>
+    
+
+              <script>
+                $(function () {
+                    // ON SELECTING ROW
+                    $(".gfgarticles").click(function () {
+                //FINDING ELEMENTS OF ROWS AND STORING THEM IN VARIABLES
+                        var a =
+                 $(this).parents("tr").find(".gfgusername").text();
+                        var c =
+                 $(this).parents("tr").find(".gfgpp").text();
+                        var d =
+                 $(this).parents("tr").find(".gfgscores").text();
+                        var e = 
+                 $(this).parents("tr").find(".gfgarticles").text();
+                        var p = "";
+                        // CREATING DATA TO SHOW ON MODEL
+                        p += 
+               
+                
+                  "<p id='e' name='GFGcoding' >شرح کار: "
+                          + e + " </p>";
+                          
+                          
+                        //CLEARING THE PREFILLED DATA
+                        $("#divGFG").empty();
+                        //WRITING THE DATA ON MODEL
+                        $("#divGFG").append(p);
+                    });
+                });
+                
+    
+            </script>
+                <!-- CREATING BOOTSTRAP MODEL -->
+                <div class="modal fade" 
+                 id="gfgmodal"
+                 tabindex="-1"
+                 role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <!-- MODEL TITLE -->
+                            <h2 class="modal-title"
+                                id="gfgmodallabel">
+                             گزارش روزانه</h2>
+                            <button type="button" style="margin-left: 1px;" 
+                                    class="close"
+                                    data-dismiss="modal" 
+                                    aria-label="Close">
+                                <span aria-hidden="true" >
+                                  ×</span>
+                            </button>
+                        </div>
+                        <!-- MODEL BODY -->
+                        <div class="modal-body" >
+                            <div class="GFGclass" style="float: right;"
+                                 id="divGFG"></div>
+                                <br>
+                                <br>
+                            <div class="modal-footer" >
+                <!-- The close button in the bottom of the modal -->
+                                <button type="button" style="margin-left: 200px; background-color: #ffb500;"
+                                        class="btn btn-secondary" 
+                                        data-dismiss="modal">
+                                  بستن</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+           
+                
+                
+              <td ><input type="checkbox" name="otherwork" {% ifnotequal reportdetails.otherworkdesc "0" %}  checked {% endifnotequal %} readonly ></td>
+              <td  title="{{reportdetails.otherwork}}"
+                {% ifnotequal reportdetails.otherwork reportdetails.workdesc %}  >
+                  {{reportdetails.otherwork}}
+                  
+
+              </td   {% endifnotequal %}   >
+  
+              
+              <td title="{{reportdetails.tag}}" style="text-align: center;">{{reportdetails.tag}}</td>
+              
+               
+              <form method="POST" >{% csrf_token %}
+                <td {% ifequal reportdetails.username_id request.user %} title="{{reportdetails.comment}}"{% endifequal %} title="{{reportdetails.comment}}"><input style="text-align: center; padding-left: 20px; width: 50px; " type="text" name="comment" {% ifequal reportdetails.username_id user.username %}  value="{{ reportdetails.comment}}"{% endifequal %}
+                  {% ifnotequal reportdetails.username_id user.username %}{% ifequal reportdetails.public True %}   value="{{ reportdetails.comment}}"{% endifequal %} {% endifnotequal %} />
+                </td>
+                <td> <input  value="{{reportdetails.id }}" name="id" type="hidden"/>
+      
+          <input type="submit" value="ثبت" class="buttontd" name="submit-issue-solved" ><input type="checkbox" value=True name="public"{% ifequal reportdetails.public True %}  checked {% endifequal %} ></td>
+          
+              </form>
+              
+             
+             
+               
+                {% endfor %}  
+          
+                
+               
+            </tr>
+            </table>
+             
+        
+
+          </div>
+          </section>
+          </div>
+          
+
+          
+          
+      
+          {%	include	"pagination.html"	with	page=posts	%}
+          
+          
+        </div>
+        
+      
+    
+       
+   
+    <script src="{% static 'admin/js/jquery-3.4.1.min.js'%}"></script>
+    <script type="text/javascript">
+      $(function() {
+        // Adjust intro image height based on width.
+        $(window).resize(function() {
+          var img = $("#tm-intro-img");
+          var imgWidth = img.width();
+
+          // 640x425 ratio
+          var imgHeight = (imgWidth * 425) / 640;
+
+          if (imgHeight < 300) {
+            imgHeight = 300;
+          }
+
+          img.css("min-height", imgHeight + "px");
+        });
+      });
+
+
+      document.getElementById('result-otherworkdesc').innerHTML=localStorage.getItem("otherworkdesc");
+
+
+
+
+
+
+ 
+    </script>
+
+  
+
+</div> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="{% static 'admin/dailyreport/js/form.js'%}"></script>
+  </body>
+</html>
